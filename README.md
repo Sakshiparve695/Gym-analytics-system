@@ -1,168 +1,93 @@
-# 🏋️ AI-Driven Gym Analytics & Management System
+# 🏋️ Gym Data Pipeline & Analytics System
 
-## 🚀 Overview
+## 📌 Overview
+This project is an end-to-end Data Engineering and analytics system that processes gym member activity data and generates insights using ETL pipelines.
 
-This project is a backend-driven Gym Management System built using FastAPI and MySQL. It enables real-time member management, attendance tracking, and advanced analytics using ETL pipelines and machine learning. The system is containerized using Docker and integrated with CI/CD for automated builds and validation.
-
----
-
-## 🧠 Complete Workflow (How the System Works)
-
-### 1️⃣ Data Ingestion (API Layer)
-
-* Users interact with the system through REST APIs.
-* APIs like `/members` and `/attendance` collect real-time data.
-* FastAPI handles request validation and routing.
+It simulates how user activity data is collected, transformed, and used for analytics such as churn prediction and performance tracking.
 
 ---
 
-### 2️⃣ Data Storage (Database Layer)
-
-* All incoming data is stored in MySQL.
-* Core tables:
-
-  * `members` → stores user details
-  * `attendance` → stores visit records
-  * `users` → handles authentication
-  * `member_analytics` → stores processed insights
+## ⚙️ Tech Stack
+- Python  
+- FastAPI (REST API)  
+- MySQL  
+- Pandas  
+- Scikit-learn  
+- Docker  
 
 ---
 
-### 3️⃣ ETL Pipeline (Data Processing Layer)
+## 🔄 Workflow
 
-* Extracts attendance data from database
-* Transforms data into meaningful features:
-
-  * Total visits
-  * Visit frequency
-  * Churn risk
-* Loads processed data into `member_analytics` table
-* Uses optimized SQL operations with upsert logic
+1. Member and attendance data is collected via API  
+2. Data is stored in MySQL database  
+3. ETL pipeline processes attendance data  
+4. Data is transformed (visit counts, churn logic)  
+5. Processed data is stored in analytics table  
+6. APIs provide insights and predictions  
 
 ---
 
-### 4️⃣ Machine Learning (Analytics Layer)
+## 🧠 Data Architecture
 
-* Logistic Regression model is trained on:
-
-  * Visits
-  * Average visits
-  * Days since last visit
-* Predicts whether a member is:
-
-  * HIGH risk
-  * LOW risk
+- Raw Layer → Member & attendance data (MySQL)  
+- Processed Layer → Aggregated visit data  
+- Analytics Layer → member_analytics table  
 
 ---
 
-### 5️⃣ Business Insights & Optimization
+## 🔄 ETL Pipeline
 
-* `/churn` → predicts churn risk for members
-* `/insights` → categorizes users (Highly Active, Moderate, Low)
-* `/top-members` → uses heap algorithm to find top active members efficiently
-
----
-
-### 6️⃣ Authentication System
-
-* `/signup` → register new users
-* `/login` → authenticate users
-* Ensures controlled API access
+- Extract: Attendance data from database  
+- Transform:  
+  - Calculate total visits  
+  - Identify churn risk  
+- Load: Store results in `member_analytics` table  
 
 ---
 
-### 7️⃣ Visualization Layer
+## 📊 Features
 
-* Generates attendance charts dynamically using Matplotlib
-* Provides visual insights through API endpoints
-
----
-
-### 8️⃣ Containerization (Docker)
-
-* Application is containerized using Docker
-* Ensures:
-
-  * Consistent environment
-  * Easy deployment
-  * Portability across systems
+- End-to-end ETL pipeline  
+- Member activity tracking  
+- Churn prediction using Logistic Regression  
+- Data aggregation and analytics APIs  
+- Visualization of attendance data  
+- Containerized using Docker  
 
 ---
 
-### 9️⃣ CI/CD Pipeline (GitHub Actions)
+## 📁 Project Structure
 
-* Automatically triggers on every code push
-* Steps:
-
-  * Install dependencies
-  * Validate Python code
-  * Build Docker image
-* Ensures code quality and automation
+gym_analytics/  
+│── Gym_Management_System.py   # FastAPI backend  
+│── etl.py                    # ETL pipeline  
+│── requirements.txt  
+│── Dockerfile  
 
 ---
 
-## ⚙️ Features
+## 📊 Key Functionalities
 
-* Member Management (CRUD APIs)
-* Attendance Tracking System
-* Churn Prediction using Machine Learning
-* ETL Pipeline for Data Transformation
-* Top Active Members using Heap (DSA)
-* Authentication (Signup/Login)
-* Data Visualization APIs
-* Dockerized Deployment
-* CI/CD Automation
+- Add, update, and manage members  
+- Track attendance data  
+- Identify high-risk (churn) members  
+- Generate insights on user activity  
+- Provide analytics via APIs  
 
 ---
 
-## 🛠️ Tech Stack
+## 💡 Key Learnings
 
-* Python, FastAPI
-* MySQL
-* Pandas, Scikit-learn
-* Docker
-* Git, GitHub Actions (CI/CD)
-* REST APIs, ETL
-* Postman (API Testing)
-* Data Structures & Algorithms
-
----
-
-## ▶️ Run Locally
-
-```bash
-uvicorn Gym_Management_System:app --reload
-```
-
----
-
-## 🐳 Run with Docker
-
-```bash
-docker build -t gym-api .
-docker run -p 8000:8000 -e DB_HOST=host.docker.internal gym-api
-```
-
----
-
-## 📊 API Documentation
-
-Access interactive API docs at:
-
-```
-http://127.0.0.1:8000/docs
-```
-
----
-
-## 📌 Key Highlights
-
-* End-to-end backend + data engineering + ML system
-* Real-world project with deployment and automation
-* Demonstrates full development lifecycle (design → build → deploy → automate)
+- Built ETL pipeline for user activity data  
+- Applied data transformation for analytics  
+- Implemented basic machine learning for churn prediction  
+- Integrated backend APIs with data workflows  
+- Understood how data pipelines support business insights  
 
 ---
 
 ## 👩‍💻 Author
 
-Sakshi Parve
+Sakshi Parve  
+Aspiring Data Engineer | Python | SQL | ETL | GCP
