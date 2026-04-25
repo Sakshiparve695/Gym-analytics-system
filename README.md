@@ -1,151 +1,129 @@
-# 🏋️ Gym Analytics System (FastAPI + ML + Docker)
+# 🏋️ Gym Data Pipeline System (ETL + Analytics + ML)
 
 ## 🚀 Overview
 
-The **Gym Analytics System** is a production-ready backend application designed to help gym owners leverage data for smarter decision-making.
-
-It combines **data engineering, machine learning, and scalable API design** to transform raw fitness data into actionable insights.
+This project implements an end-to-end **data engineering pipeline** for fitness analytics. It ingests workout data via APIs, processes it through ETL pipelines, and generates insights for performance tracking and optimization.
 
 ---
 
 ## 🎯 Problem Statement
 
-Gyms collect large amounts of data (member attendance, workouts, performance metrics), but this data is rarely used effectively.
+Fitness systems generate large volumes of workout data (user activity, duration, intensity), but this data is often not structured for analysis.
 
 This system solves that by:
 
-* Converting raw data into **structured insights**
-* Providing **predictive analytics** for fitness trends
-* Offering a **scalable backend system** for integration with apps/dashboards
+* Building a structured **data pipeline (raw → processed → fact)**
+* Enabling analytics on user performance
+* Supporting predictive insights using machine learning
 
 ---
 
-## 💡 Key Features
+## 🏗️ Architecture
 
-* ⚡ High-performance REST APIs using FastAPI
-* 📊 ETL pipeline for data processing
-* 🤖 Machine Learning model for predictions
-* 🐳 Dockerized for portability and deployment
-* 🔄 CI/CD pipeline using GitHub Actions
-* 📸 API and deployment previews included
-
----
-
-## 🧠 Machine Learning
-
-* **Model Used:** Linear Regression *(replace if different)*
-* **Use Case:** Predict calorie burn / performance trends
-* **Input Features:** Age, weight, workout duration, intensity *(example)*
-* **Output:** Estimated calories burned
-
-### 📊 Model Performance
-
-* Metric: RMSE / Accuracy *(update with your actual value)*
-* Insight: Helps trainers optimize workout plans based on predicted performance
-
----
-
-## 🏗️ Industry-Level Architecture
-
-### 📂 Project Structure
-
-```bash
-app/
- ├── main.py                  # (your current Gym_Management_System.py)
- ├── ml_model.py              # (if ML code exists inside main file)
-
-etl/
- ├── etl.py                   # (your existing file)
-
-assets/
- ├── Deployment.png
- ├── Docker-Success.png
- ├── FastApi-1.png
- ├── Response-1.png
- ├── Response-2.png
- ├── containerized.png
- ├── docker_container.png
-
-.github/
- ├── workflows/
-
-Dockerfile
-requirements.txt
-README.md
-
-Dockerfile
-requirements.txt
-.github/workflows/
-README.md
+```
+Client / API Testing Tool
+        │
+        ▼
+FastAPI (Data Ingestion Layer)
+        │
+        ▼
+MySQL - Raw Layer (raw_gym_data)
+        │
+        ▼
+ETL Pipeline (Python)
+        │
+        ▼
+Processed Layer (processed_workouts)
+        │
+        ▼
+Fact Table (fact_fitness)
+        │
+        ▼
+Analytics + ML Insights
 ```
 
 ---
 
-### 🔁 System Flow
+## ⚙️ Tech Stack
 
-1. Raw gym data is processed using **ETL pipeline**
-2. Clean data is fed into **ML model**
-3. FastAPI exposes endpoints for:
-
-   * Predictions
-   * Analytics insights
-4. Docker ensures consistent deployment
-5. CI/CD automates build and testing
+* Python (FastAPI)
+* MySQL (Data Storage)
+* SQL (Data Processing)
+* Docker (Containerization)
+* GitHub Actions (CI/CD)
+* Machine Learning (Linear Regression)
 
 ---
 
-## 🐳 Docker Setup
+## 🔌 API Endpoints
 
-```bash
-docker build -t gym-analytics .
-docker run -p 8000:8000 gym-analytics
-```
-
----
-
-## ▶️ Run Locally
-
-```bash
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-```
+* `POST /add-workout` → Ingest workout data into raw layer
+* `GET /workouts` → Fetch workout records
+* `GET /analytics/performance` → User performance insights
+* `GET /analytics/calories` → Calorie analysis
+* `POST /predict` → Predict calorie burn (ML model)
 
 ---
 
-## 📸 Screenshots
+## 🔄 Data Pipeline
 
-* API responses
-* Docker container running
-* Deployment outputs
+1. API ingests workout data into **raw layer**
+2. ETL pipeline cleans and transforms data
+3. Data is stored in **processed and fact tables**
+4. Analytics and ML generate insights
 
 ---
 
-## 🌍 Future Enhancements
+## 🚀 ETL Logic
 
-* 🔥 Live deployment (Render / AWS / Railway)
-* 📈 Advanced ML (churn prediction, recommendations)
-* 📊 Dashboard (Streamlit / React)
-* 🧪 Unit & integration testing
+* Calculates calories burned based on workout intensity
+* Classifies performance levels
+* Aggregates user activity data
+
+---
+
+## 📊 Analytics & Insights
+
+* User performance trends
+* Calorie burn analysis
+* Workout efficiency tracking
+
+---
+
+## 🤖 Machine Learning (Support Layer)
+
+* Model: Linear Regression
+* Predicts calorie burn based on input features
+* Used to enhance analytics insights
+
+---
+
+## 🐳 Deployment
+
+* Dockerized application for portability
+* CI/CD pipeline using GitHub Actions
+
+---
+
+## 📈 Future Improvements
+
+* Pipeline orchestration (Airflow)
+* Real-time streaming (Kafka)
+* Dashboard (Streamlit / React)
+* Advanced ML models
 
 ---
 
 ## 🎯 Why This Project Stands Out
 
-* Combines **backend + data engineering + ML**
-* Demonstrates **real-world system design**
-* Shows **deployment readiness (Docker + CI/CD)**
-
-👉 Strong fit for:
-
-* Backend Engineer roles
-* Data Engineer roles
+* End-to-end **data pipeline implementation**
+* Combines backend + ETL + analytics + ML
+* Demonstrates real-world system design
+* Shows deployment and automation capabilities
 
 ---
 
 ## 👩‍💻 Author
 
-**Sakshi Parve**
-Aspiring Backend & Data Engineer
-Passionate about technology, analytics, and problem-solving
-
----
+Sakshi Parve
+Aspiring Data Engineer | Backend Developer
