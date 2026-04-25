@@ -1,4 +1,4 @@
-# 🏋️ Gym Data Pipeline System (ETL + Analytics + ML)
+# 🏋️ Fitness Data Pipeline: ETL-Driven Analytics & Performance Prediction System
 
 ## 🚀 Overview
 
