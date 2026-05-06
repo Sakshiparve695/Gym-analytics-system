@@ -1,78 +1,129 @@
-# Gym Analytics System
+# 🏋️ Fitness Data Pipeline: ETL-Driven Analytics & Performance Prediction System
 
 ## 🚀 Overview
-A backend system built using FastAPI and MySQL to manage gym members, track attendance, and generate analytical insights. The system integrates ETL pipelines and Machine Learning to predict member churn and support data-driven decision-making.
+
+This project implements an end-to-end **data engineering pipeline** for fitness analytics. It ingests workout data via APIs, processes it through ETL pipelines, and generates insights for performance tracking and optimization.
 
 ---
 
-## 🧠 System Architecture & Flow
+## 🎯 Problem Statement
 
-1. **Data Ingestion (FastAPI)**
-   - REST APIs collect data for members and attendance.
-   - Endpoints like `/members` and `/attendance` handle real-time operations.
+Fitness systems generate large volumes of workout data (user activity, duration, intensity), but this data is often not structured for analysis.
 
-2. **Data Storage (MySQL)**
-   - Raw operational data is stored in relational tables.
-   - Tables include members, attendance, and users.
+This system solves that by:
 
-3. **ETL Pipeline**
-   - Extracts attendance data.
-   - Transforms it into analytical features (visits, recency, churn risk).
-   - Loads processed data into `member_analytics` table.
-
-4. **Machine Learning Layer**
-   - Logistic Regression model predicts churn risk.
-   - Uses behavioral features like frequency and recency.
-
-5. **Analytics & Insights**
-   - APIs like `/insights` and `/churn` provide business insights.
-   - Heap-based optimization identifies top active members.
-
-6. **Authentication Layer**
-   - Secure access using signup and login APIs.
-
-7. **Deployment (Docker)**
-   - Application is containerized using Docker.
-   - Ensures consistent environment and easy deployment.
+* Building a structured **data pipeline (raw → processed → fact)**
+* Enabling analytics on user performance
+* Supporting predictive insights using machine learning
 
 ---
 
-## ⚙️ Features
-- Member management (CRUD APIs)
-- Attendance tracking
-- Churn prediction (ML)
-- ETL pipeline for analytics
-- Top active members using Heap
-- Authentication (Signup/Login)
-- Dockerized deployment
+## 🏗️ Architecture
+
+```
+Client / API Testing Tool
+        │
+        ▼
+FastAPI (Data Ingestion Layer)
+        │
+        ▼
+MySQL - Raw Layer (raw_gym_data)
+        │
+        ▼
+ETL Pipeline (Python)
+        │
+        ▼
+Processed Layer (processed_workouts)
+        │
+        ▼
+Fact Table (fact_fitness)
+        │
+        ▼
+Analytics + ML Insights
+```
 
 ---
 
-## 🛠️ Tech Stack
-- Python, FastAPI
-- MySQL
-- Pandas, Scikit-learn
-- Docker
-- REST APIs, ETL, Machine Learning
+## ⚙️ Tech Stack
+
+* Python (FastAPI)
+* MySQL (Data Storage)
+* SQL (Data Processing)
+* Docker (Containerization)
+* GitHub Actions (CI/CD)
+* Machine Learning (Linear Regression)
 
 ---
 
-## ▶️ Run Locally
-```bash
-uvicorn Gym_Management_System:app --reload
----
-🐳 Run with Docker
-docker build -t gym-api .
-docker run -p 8000:8000 -e DB_HOST=host.docker.internal gym-api
----
+## 🔌 API Endpoints
 
-📊 API Documentation
-
-Visit:
-http://127.0.0.1:8000/docs
+* `POST /add-workout` → Ingest workout data into raw layer
+* `GET /workouts` → Fetch workout records
+* `GET /analytics/performance` → User performance insights
+* `GET /analytics/calories` → Calorie analysis
+* `POST /predict` → Predict calorie burn (ML model)
 
 ---
 
-👩‍💻 Author
+## 🔄 Data Pipeline
+
+1. API ingests workout data into **raw layer**
+2. ETL pipeline cleans and transforms data
+3. Data is stored in **processed and fact tables**
+4. Analytics and ML generate insights
+
+---
+
+## 🚀 ETL Logic
+
+* Calculates calories burned based on workout intensity
+* Classifies performance levels
+* Aggregates user activity data
+
+---
+
+## 📊 Analytics & Insights
+
+* User performance trends
+* Calorie burn analysis
+* Workout efficiency tracking
+
+---
+
+## 🤖 Machine Learning (Support Layer)
+
+* Model: Linear Regression
+* Predicts calorie burn based on input features
+* Used to enhance analytics insights
+
+---
+
+## 🐳 Deployment
+
+* Dockerized application for portability
+* CI/CD pipeline using GitHub Actions
+
+---
+
+## 📈 Future Improvements
+
+* Pipeline orchestration (Airflow)
+* Real-time streaming (Kafka)
+* Dashboard (Streamlit / React)
+* Advanced ML models
+
+---
+
+## 🎯 Why This Project Stands Out
+
+* End-to-end **data pipeline implementation**
+* Combines backend + ETL + analytics + ML
+* Demonstrates real-world system design
+* Shows deployment and automation capabilities
+
+---
+
+## 👩‍💻 Author
 
 Sakshi Parve
+Aspiring Data Engineer | Backend Developer
