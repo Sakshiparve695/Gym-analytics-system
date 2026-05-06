@@ -230,4 +230,4 @@ This project demonstrates practical real-world data engineering concepts includi
 
 **Sakshi Parve**
 
-Aspiring Data Engineer | Backend Developer
+Aspiring Data Engineer
