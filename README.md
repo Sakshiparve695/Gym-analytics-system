@@ -1,5 +1,4 @@
-# 🏋️ 🏋️ GymPulse Analytics
-Dockerized ETL & Member Insights Platform
+# 🏋️  GymPulse Analytics Dockerized ETL & Member Insights Platform
 
 ## 🚀 Overview
 
