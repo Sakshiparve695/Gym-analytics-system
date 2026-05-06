@@ -1,0 +1,58 @@
+services:
+
+  db:
+    image: mysql:8
+    container_name: gym_mysql
+    restart: always
+
+    environment:
+      MYSQL_ROOT_PASSWORD: Sakshi@123
+      MYSQL_DATABASE: sakshi_project_db
+
+    ports:
+      - "3307:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+
+  api:
+    build: .
+    container_name: gym_api
+
+    ports:
+      - "8000:8000"
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    environment:
+      DB_PASSWORD: Sakshi@123
+
+    restart: always
+
+
+  etl:
+    build: .
+    container_name: gym_etl
+
+    command: python etl.py
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    environment:
+      DB_PASSWORD: Sakshi@123
+
+    restart: on-failure
+
+
+volumes:
+  mysql_data:
