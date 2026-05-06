@@ -1,4 +1,5 @@
-# 🏋️ Gym Management Analytics System
+# 🏋️ 🏋️ GymPulse Analytics
+Dockerized ETL & Member Insights Platform
 
 ## 🚀 Overview
 
