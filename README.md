@@ -1,129 +1,233 @@
-# 🏋️ Fitness Data Pipeline: ETL-Driven Analytics & Performance Prediction System
+# 🏋️ Gym Management Analytics System
 
 ## 🚀 Overview
 
-This project implements an end-to-end **data engineering pipeline** for fitness analytics. It ingests workout data via APIs, processes it through ETL pipelines, and generates insights for performance tracking and optimization.
+This project is a Dockerized end-to-end Gym Management Analytics platform built using FastAPI, MySQL, and Python ETL pipelines.
+
+The system ingests gym attendance data, processes it through an incremental ETL pipeline, and generates analytics insights such as member visit tracking and churn risk analysis.
+
+The project demonstrates practical data engineering concepts including:
+- ETL pipeline design
+- Incremental data processing
+- Staging architecture
+- Docker container orchestration
+- Health checks and resilient startup handling
+- Analytics table generation
 
 ---
 
-## 🎯 Problem Statement
+# 🏗️ Architecture
 
-Fitness systems generate large volumes of workout data (user activity, duration, intensity), but this data is often not structured for analysis.
-
-This system solves that by:
-
-* Building a structured **data pipeline (raw → processed → fact)**
-* Enabling analytics on user performance
-* Supporting predictive insights using machine learning
-
----
-
-## 🏗️ Architecture
-
-```
-Client / API Testing Tool
-        │
-        ▼
-FastAPI (Data Ingestion Layer)
-        │
-        ▼
-MySQL - Raw Layer (raw_gym_data)
-        │
-        ▼
+```text
+FastAPI API
+     ↓
+raw_attendance
+     ↓
 ETL Pipeline (Python)
-        │
-        ▼
-Processed Layer (processed_workouts)
-        │
-        ▼
-Fact Table (fact_fitness)
-        │
-        ▼
-Analytics + ML Insights
+     ↓
+stg_attendance
+     ↓
+member_analytics
+     ↓
+Churn Analytics
 ```
 
 ---
 
-## ⚙️ Tech Stack
+# ⚙️ Tech Stack
 
-* Python (FastAPI)
-* MySQL (Data Storage)
-* SQL (Data Processing)
-* Docker (Containerization)
-* GitHub Actions (CI/CD)
-* Machine Learning (Linear Regression)
+## Backend
+- FastAPI
+- Python
 
----
+## Database
+- MySQL
 
-## 🔌 API Endpoints
+## Data Engineering
+- ETL Pipeline
+- Incremental Loading
+- Staging Tables
+- Metadata Tracking
 
-* `POST /add-workout` → Ingest workout data into raw layer
-* `GET /workouts` → Fetch workout records
-* `GET /analytics/performance` → User performance insights
-* `GET /analytics/calories` → Calorie analysis
-* `POST /predict` → Predict calorie burn (ML model)
+## DevOps / Deployment
+- Docker
+- Docker Compose
 
----
-
-## 🔄 Data Pipeline
-
-1. API ingests workout data into **raw layer**
-2. ETL pipeline cleans and transforms data
-3. Data is stored in **processed and fact tables**
-4. Analytics and ML generate insights
+## Analytics
+- Churn Risk Analysis
+- Visit Tracking
 
 ---
 
-## 🚀 ETL Logic
+# 🔌 API Features
 
-* Calculates calories burned based on workout intensity
-* Classifies performance levels
-* Aggregates user activity data
-
----
-
-## 📊 Analytics & Insights
-
-* User performance trends
-* Calorie burn analysis
-* Workout efficiency tracking
+- Add gym attendance records
+- Fetch attendance data
+- Process attendance through ETL pipeline
+- Generate analytics insights
 
 ---
 
-## 🤖 Machine Learning (Support Layer)
+# 🔄 ETL Pipeline Workflow
 
-* Model: Linear Regression
-* Predicts calorie burn based on input features
-* Used to enhance analytics insights
+## 1. Extract
+New attendance records are extracted from:
+- `raw_attendance`
 
----
-
-## 🐳 Deployment
-
-* Dockerized application for portability
-* CI/CD pipeline using GitHub Actions
+using incremental loading based on:
+- `etl_metadata.last_run`
 
 ---
 
-## 📈 Future Improvements
-
-* Pipeline orchestration (Airflow)
-* Real-time streaming (Kafka)
-* Dashboard (Streamlit / React)
-* Advanced ML models
-
----
-
-## 🎯 Why This Project Stands Out
-
-* End-to-end **data pipeline implementation**
-* Combines backend + ETL + analytics + ML
-* Demonstrates real-world system design
-* Shows deployment and automation capabilities
+## 2. Transform
+The ETL pipeline:
+- validates records
+- aggregates member visits
+- calculates latest visit date
+- computes churn risk indicators
 
 ---
 
-## 👩‍💻 Author
+## 3. Load
+Processed data is loaded into:
+- `member_analytics`
 
-Sakshi Parve
+---
+
+# 📊 Analytics Features
+
+The analytics layer provides:
+
+- Total member visits
+- Last visit tracking
+- Churn risk analysis
+- Member activity aggregation
+
+---
+
+# ⚡ Churn Risk Logic
+
+Members are currently marked as churn risk when:
+
+```sql
+total_visits < 5
+```
+
+This can later be extended with:
+- inactivity duration
+- attendance frequency
+- machine learning models
+
+---
+
+# 🐳 Dockerized Architecture
+
+The project is fully containerized using Docker Compose.
+
+## Services
+
+- `api` → FastAPI backend
+- `db` → MySQL database
+- `etl` → ETL processing service
+
+---
+
+# 🔧 Production-Style Features Implemented
+
+## ✅ Retry-Based DB Connection Handling
+ETL service retries database connections until MySQL becomes available.
+
+## ✅ Docker Health Checks
+MySQL health checks ensure dependent services start only after DB readiness.
+
+## ✅ Incremental ETL Processing
+Only newly inserted records are processed during each ETL cycle.
+
+## ✅ Continuous ETL Scheduler
+ETL runs automatically at scheduled intervals.
+
+## ✅ Environment Variable Management
+Sensitive credentials managed using `.env`.
+
+---
+
+# 📂 Database Tables
+
+## Raw Layer
+- `raw_attendance`
+
+## Staging Layer
+- `stg_attendance`
+
+## Analytics Layer
+- `member_analytics`
+
+## Metadata Layer
+- `etl_metadata`
+
+---
+
+# 🚀 Running the Project
+
+## Clone Repository
+
+```bash
+git clone <your-repo-link>
+```
+
+---
+
+## Start Containers
+
+```bash
+docker-compose up --build
+```
+
+---
+
+## Verify Running Containers
+
+```bash
+docker ps
+```
+
+---
+
+# 📸 Project Screenshots
+
+Screenshots included for:
+- Docker containers
+- ETL logs
+- Analytics outputs
+- Churn analysis
+
+---
+
+# 📈 Future Improvements
+
+- Power BI / Tableau dashboard
+- Kafka streaming integration
+- Airflow orchestration
+- Advanced churn prediction models
+- Cloud deployment
+
+---
+
+# 🎯 Why This Project Stands Out
+
+This project demonstrates practical real-world data engineering concepts including:
+
+- API-driven data ingestion
+- ETL pipeline architecture
+- Incremental processing
+- Container orchestration
+- Analytics engineering
+- Production-style debugging and resiliency
+
+---
+
+# 👩‍💻 Author
+
+**Sakshi Parve**
+
 Aspiring Data Engineer | Backend Developer
