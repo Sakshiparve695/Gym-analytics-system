@@ -1,0 +1,46 @@
+name: Gym Management CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  build-and-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Check FastAPI Syntax
+      run: |
+        python -m py_compile Gym_Management_System.py
+
+    - name: Check ETL Syntax
+      run: |
+        python -m py_compile etl.py
+
+    - name: Build Docker Containers
+      run: |
+        docker compose build
+
+    - name: Verify Docker Compose
+      run: |
+        docker compose config
