@@ -1,95 +1,139 @@
-# 🏋️  GymPulse Analytics Dockerized ETL & Member Insights Platform
+# 🏋️ GymPulse Analytics Dockerized ETL & Member Insights Platform
 
 ## 🚀 Overview
 
-This project is a Dockerized end-to-end Gym Management Analytics platform built using FastAPI, MySQL, and Python ETL pipelines.
+GymPulse is a Dockerized end-to-end gym management analytics platform built using FastAPI, MySQL, Python ETL pipelines, and machine learning–based churn analysis.
 
-The system ingests gym attendance data, processes it through an incremental ETL pipeline, and generates analytics insights such as member visit tracking and churn risk analysis.
+The system ingests gym attendance data through REST APIs, processes it using incremental ETL workflows, and generates analytics insights such as member activity tracking, attendance monitoring, and churn risk prediction.
 
-The project demonstrates practical data engineering concepts including:
-- ETL pipeline design
-- Incremental data processing
-- Staging architecture
-- Docker container orchestration
-- Health checks and resilient startup handling
-- Analytics table generation
+This project demonstrates practical backend engineering and data engineering concepts including:
+- REST API development
+- Incremental ETL processing
+- Dockerized multi-service architecture
+- Analytics pipeline design
+- Metadata-driven ETL workflows
+- Retry and resiliency handling
+- Churn prediction using Logistic Regression
 
 ---
 
-# 🏗️ Architecture
+# 🎯 Problem Statement
+
+Gym management systems often lack automated analytics and operational insights for tracking member engagement and churn behavior.
+
+This project solves that by:
+
+- Building a scalable API-driven attendance system
+- Automating ETL-based attendance processing
+- Generating analytics-ready member insights
+- Predicting churn risk using machine learning
+- Implementing production-style Dockerized deployment
+
+---
+
+# 🏗️ System Architecture
 
 ```text
-FastAPI API
-     ↓
-raw_attendance
-     ↓
-ETL Pipeline (Python)
-     ↓
-stg_attendance
-     ↓
-member_analytics
-     ↓
-Churn Analytics
+Gym Members / Admin
+          │
+          ▼
+FastAPI Backend APIs
+          │
+          ▼
+MySQL Raw Layer
+(raw_attendance)
+          │
+          ▼
+Python ETL Pipeline
+          │
+ ┌──────────────────┐
+ ▼                  ▼
+Staging Layer       Analytics Layer
+(stg_attendance)    (member_analytics)
+          │
+          ▼
+Churn Prediction Engine
+(Logistic Regression)
 ```
 
 ---
 
 # ⚙️ Tech Stack
 
-## Backend
-- FastAPI
-- Python
-
-## Database
-- MySQL
-
-## Data Engineering
-- ETL Pipeline
-- Incremental Loading
-- Staging Tables
-- Metadata Tracking
-
-## DevOps / Deployment
-- Docker
-- Docker Compose
-
-## Analytics
-- Churn Risk Analysis
-- Visit Tracking
+| Category | Technologies |
+|---|---|
+| Backend | FastAPI, Python |
+| Database | MySQL |
+| ETL | Python, Incremental Processing |
+| Machine Learning | Scikit-learn Logistic Regression |
+| DevOps | Docker, Docker Compose |
+| Analytics | SQL, Pandas |
+| APIs | REST APIs |
+| Monitoring | Logging |
 
 ---
 
-# 🔌 API Features
+# ⚡ Key Features
 
-- Add gym attendance records
-- Fetch attendance data
-- Process attendance through ETL pipeline
-- Generate analytics insights
+- REST API-based member management
+- Attendance tracking system
+- Incremental ETL processing using metadata tracking
+- Staging and analytics layer architecture
+- Churn risk prediction using Logistic Regression
+- Dockerized multi-container deployment
+- Retry-based MySQL connection handling
+- Automated ETL scheduling
+- Logging and resiliency support
+
+---
+
+# 🔌 API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/` | Health check |
+| POST | `/members` | Add gym member |
+| GET | `/members` | View members |
+| PUT | `/members/{member_id}` | Update member |
+| DELETE | `/members/{member_id}` | Delete member |
+| POST | `/attendance` | Mark attendance |
+| GET | `/top-members` | View top active members |
+| GET | `/churn` | Churn prediction analysis |
+| GET | `/insights` | Gym insights and analytics |
 
 ---
 
 # 🔄 ETL Pipeline Workflow
 
-## 1. Extract
-New attendance records are extracted from:
+## 1️⃣ Extract
+
+New attendance records are extracted incrementally from:
+
 - `raw_attendance`
 
-using incremental loading based on:
+using metadata tracking from:
+
 - `etl_metadata.last_run`
 
 ---
 
-## 2. Transform
+## 2️⃣ Transform
+
 The ETL pipeline:
-- validates records
+
+- validates attendance records
 - aggregates member visits
-- calculates latest visit date
-- computes churn risk indicators
+- calculates latest visit dates
+- computes activity metrics
+- prepares analytics-ready datasets
 
 ---
 
-## 3. Load
+## 3️⃣ Load
+
 Processed data is loaded into:
+
+- `stg_attendance`
 - `member_analytics`
 
 ---
@@ -100,58 +144,52 @@ The analytics layer provides:
 
 - Total member visits
 - Last visit tracking
-- Churn risk analysis
+- Attendance monitoring
 - Member activity aggregation
+- Churn risk analysis
+- Top active members insights
 
 ---
 
-# ⚡ Churn Risk Logic
+# 🤖 Churn Prediction Logic
 
-Members are currently marked as churn risk when:
+The project uses Logistic Regression to identify members with high churn risk based on:
 
-```sql
-total_visits < 5
-```
-
-This can later be extended with:
+- total visits
+- average visit frequency
 - inactivity duration
-- attendance frequency
-- machine learning models
+- recent attendance behavior
+
+Members with low activity or long inactivity periods are marked as higher churn risk.
 
 ---
 
-# 🐳 Dockerized Architecture
+# 🐳 Dockerized Multi-Service Architecture
 
 The project is fully containerized using Docker Compose.
 
 ## Services
 
-- `api` → FastAPI backend
-- `db` → MySQL database
-- `etl` → ETL processing service
+| Service | Description |
+|---|---|
+| `api` | FastAPI backend service |
+| `db` | MySQL database |
+| `etl` | ETL processing service |
 
 ---
 
-# 🔧 Production-Style Features Implemented
+# ⚙️ Reliability & Resiliency Features
 
-## ✅ Retry-Based DB Connection Handling
-ETL service retries database connections until MySQL becomes available.
-
-## ✅ Docker Health Checks
-MySQL health checks ensure dependent services start only after DB readiness.
-
-## ✅ Incremental ETL Processing
-Only newly inserted records are processed during each ETL cycle.
-
-## ✅ Continuous ETL Scheduler
-ETL runs automatically at scheduled intervals.
-
-## ✅ Environment Variable Management
-Sensitive credentials managed using `.env`.
+- Retry-based MySQL connection handling
+- ETL recovery support using logging
+- Dockerized service dependency management
+- Incremental ETL execution using metadata tracking
+- Automated continuous ETL scheduling
+- Environment variable–based credential management
 
 ---
 
-# 📂 Database Tables
+# 📂 Database Layers
 
 ## Raw Layer
 - `raw_attendance`
@@ -167,17 +205,72 @@ Sensitive credentials managed using `.env`.
 
 ---
 
-# 🚀 Running the Project
+# 📸 Project Screenshots
 
-## Clone Repository
+## ⚡ FastAPI Swagger Documentation
 
-```bash
-git clone <your-repo-link>
+![FastAPI Docs](screenshots/Docker_FastAPI.png)
+
+---
+
+## 🐳 Dockerized Multi-Service Architecture
+
+![Docker Containers](screenshots/ETL_Docker_Container.png)
+
+---
+
+## 🔄 ETL Pipeline Execution Logs
+
+![ETL Logs](screenshots/GYM_analytics_ETL_Log.png)
+
+---
+
+## 📊 Analytics Layer Output
+
+![Analytics Layer](screenshots/GYM_analytics_Churn_Risk.png)
+
+---
+
+# 📁 Project Structure
+
+```text
+GYM_Management_analytics/
+│
+├── backend/
+├── docker-compose.yml
+├── Dockerfile
+├── etl.py
+├── Gym_Management_System.py
+├── requirements.txt
+├── screenshots/
+├── .env
+└── README.md
 ```
 
 ---
 
-## Start Containers
+# 🚀 Running the Project
+
+## 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/Sakshiparve695/Gym-analytics-system.git
+cd Gym-analytics-system
+```
+
+---
+
+## 2️⃣ Configure Environment Variables
+
+Create a `.env` file:
+
+```env
+DB_PASSWORD=your_password
+```
+
+---
+
+## 3️⃣ Start Docker Containers
 
 ```bash
 docker-compose up --build
@@ -185,7 +278,7 @@ docker-compose up --build
 
 ---
 
-## Verify Running Containers
+## 4️⃣ Verify Running Containers
 
 ```bash
 docker ps
@@ -193,41 +286,40 @@ docker ps
 
 ---
 
-# 📸 Project Screenshots
+## 5️⃣ Access FastAPI Swagger Docs
 
-Screenshots included for:
-- Docker containers
-- ETL logs
-- Analytics outputs
-- Churn analysis
+```text
+http://127.0.0.1:8000/docs
+```
 
 ---
 
 # 📈 Future Improvements
 
-- Power BI / Tableau dashboard
-- Kafka streaming integration
-- Airflow orchestration
-- Advanced churn prediction models
-- Cloud deployment
+- Power BI / Tableau dashboard integration
+- Kafka-based streaming ingestion
+- Apache Airflow orchestration
+- Cloud deployment on GCP/AWS
+- Advanced ML churn prediction models
+- Real-time analytics monitoring
 
 ---
 
 # 🎯 Why This Project Stands Out
 
-This project demonstrates practical real-world data engineering concepts including:
+This project demonstrates practical real-world engineering concepts including:
 
 - API-driven data ingestion
-- ETL pipeline architecture
-- Incremental processing
-- Container orchestration
-- Analytics engineering
-- Production-style debugging and resiliency
+- Incremental ETL pipeline design
+- Dockerized backend architecture
+- Machine learning integration
+- Metadata-driven processing
+- Production-style debugging and resiliency handling
+- Analytics engineering workflows
 
 ---
 
 # 👩‍💻 Author
 
-**Sakshi Parve**
-
-Aspiring Data Engineer
+Sakshi Parve
+Aspiring Data Engineer & Backend Developer
