@@ -209,25 +209,25 @@ The project is fully containerized using Docker Compose.
 
 ## ⚡ FastAPI Swagger Documentation
 
-![FastAPI Docs](screenshots/Docker_FastAPI.png)
+![FastAPI Docs](Docker_FastAPI.png)
 
 ---
 
 ## 🐳 Dockerized Multi-Service Architecture
 
-![Docker Containers](screenshots/ETL_Docker_Container.png)
+![Docker Containers](ETL_Docker_Container.png)
 
 ---
 
 ## 🔄 ETL Pipeline Execution Logs
 
-![ETL Logs](screenshots/GYM_analytics_ETL_Log.png)
+![ETL Logs](GYM_analytics_ETL_Log.png)
 
 ---
 
 ## 📊 Analytics Layer Output
 
-![Analytics Layer](screenshots/GYM_Analytics_Churn_Risk.png)
+![Analytics Layer](GYM_Analytics_Churn_Risk.png)
 
 ---
 
