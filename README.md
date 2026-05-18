@@ -1,3 +1,4 @@
+![test](Docker_FastAPI.png)
 # 🏋️ GymPulse Analytics Dockerized ETL & Member Insights Platform
 
 ## 🚀 Overview
