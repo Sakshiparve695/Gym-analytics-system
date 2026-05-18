@@ -227,7 +227,7 @@ The project is fully containerized using Docker Compose.
 
 ## 📊 Analytics Layer Output
 
-![Analytics Layer](screenshots/GYM_analytics_Churn_Risk.png)
+![Analytics Layer](screenshots/GYM_Analytics_Churn_Risk.png)
 
 ---
 
