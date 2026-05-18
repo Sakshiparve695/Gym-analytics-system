@@ -1,4 +1,4 @@
-![test](Docker_FastAPI.png)
+
 # 🏋️ GymPulse Analytics Dockerized ETL & Member Insights Platform
 
 ## 🚀 Overview
@@ -210,25 +210,25 @@ The project is fully containerized using Docker Compose.
 
 ## ⚡ FastAPI Swagger Documentation
 
-![FastAPI Docs](Docker_FastAPI.png)
+![FastAPI Docs](Screenshots/Docker_FastAPI.png)
 
 ---
 
 ## 🐳 Dockerized Multi-Service Architecture
 
-![Docker Containers](ETL_Docker_Container.png)
+![Docker Containers](Screenshots/ETL_Docker_Container.png)
 
 ---
 
 ## 🔄 ETL Pipeline Execution Logs
 
-![ETL Logs](GYM_analytics_ETL_Log.png)
+![ETL Logs](Screenshots/GYM_analytics_ETL_Log.png)
 
 ---
 
 ## 📊 Analytics Layer Output
 
-![Analytics Layer](GYM_Analytics_Churn_Risk.png)
+![Analytics Layer](Screenshots/GYM_Analytics_Churn_Risk.png)
 
 ---
 
