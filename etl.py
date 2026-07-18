@@ -3,6 +3,7 @@ import logging
 import os
 import time
 from dotenv import load_dotenv
+from database import get_connection
 
 load_dotenv()
 
@@ -12,44 +13,6 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-# -------- DB CONNECTION FUNCTION --------
-#def get_connection():
-#    return mysql.connector.connect(
-        #host = "localhost",
-        #host = "host.docker.internal",
-#        host="db",
-#        user="root",
-#        password=os.getenv("DB_PASSWORD"),
-#        database="sakshi_project_db"
-#    )
-def get_connection():
-
-    MAX_RETRIES = 10
-    RETRY_DELAY = 5
-
-    for attempt in range(MAX_RETRIES):
-        try:
-            logging.info(f"Attempt {attempt + 1} to connect to MySQL")
-
-            conn = mysql.connector.connect(
-                host="db",
-                user="root",
-                password=os.getenv("DB_PASSWORD"),
-                database="sakshi_project_db"
-            )
-
-            logging.info("Connected to MySQL successfully")
-            return conn
-
-        except mysql.connector.Error as e:
-            logging.error(f"MySQL Connection Failed: {e}")
-
-            if attempt < MAX_RETRIES - 1:
-                logging.info(f"Retrying in {RETRY_DELAY} seconds...")
-                time.sleep(RETRY_DELAY)
-            else:
-                logging.error("Max retries reached. Exiting.")
-                raise
 
 def run_etl():
     logging.info("ETL Started")
@@ -103,7 +66,7 @@ def run_etl():
             """, (member_id, visit_date))
             valid_rows += 1
 
-        conn.commit()
+        #conn.commit()
         logging.info(f"Inserted {valid_rows} records into staging")
 
         # -------- STEP 4: TRANSFORM --------
@@ -146,13 +109,14 @@ def run_etl():
 
         # -------- STEP 7: CLEAN STAGING --------
         cursor.execute("TRUNCATE TABLE stg_attendance")
-        conn.commit()
+        #conn.commit()
 
         logging.info("ETL Completed Successfully")
 
     except Exception as e:
+        conn.rollback()
         logging.error(f"ETL Failed: {str(e)}")
-
+        raise
     finally:
         cursor.close()
         conn.close()
@@ -160,6 +124,6 @@ def run_etl():
 
 # -------- SCHEDULER --------
 if __name__ == "__main__":
-    while True:
+    #while True:
         run_etl()
-        time.sleep(300)  # every 5 mins
+        #time.sleep(300)  # every 5 mins
