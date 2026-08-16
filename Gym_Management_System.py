@@ -4,6 +4,7 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 import os
 from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException
 import datetime
 
 load_dotenv()
@@ -14,6 +15,15 @@ app = FastAPI()
 def home():
     return {"message": "Gym Management API is running 🚀"}
 
+from nutrition_recommender import (
+    get_member_profile,
+    get_member_attendance,
+    get_activity_level,
+    calculate_nutrition_target,
+    get_foods,
+    ml_recommend_meals,
+    build_daily_plan
+)
 # -------- DB CONNECTION --------
 def get_connection():
     return mysql.connector.connect(
@@ -170,3 +180,85 @@ def churn_prediction():
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# ----------AI/ML Nutrition Recommendation---------
+@app.get("/nutrition/recommendation/{member_id}")
+def nutrition_recommendation(member_id: int):
+
+    profile = get_member_profile(member_id)
+
+    if not profile:
+        raise HTTPException(
+            status_code=404,
+            detail="Member not found"
+        )
+
+    visits = get_member_attendance(member_id)
+
+    activity_level = get_activity_level(visits)
+
+    nutrition_target = calculate_nutrition_target(
+        profile,
+        activity_level
+    )
+
+    foods = get_foods(profile["diet_type"])
+
+    if not foods:
+        raise HTTPException(
+            status_code=404,
+            detail="No meals available for this diet type"
+        )
+
+    ml_recommendations = ml_recommend_meals(
+        foods,
+        nutrition_target
+    )
+
+    daily_plan = build_daily_plan(
+        foods,
+        nutrition_target
+    )
+
+    total_calories = 0
+    total_protein = 0
+    plan = {}
+
+    for meal_type, (meal, portion) in daily_plan.items():
+
+        calories = float(meal["calories"]) * portion
+        protein = float(meal["protein_g"]) * portion
+
+        total_calories += calories
+        total_protein += protein
+
+        plan[meal_type] = {
+            "food_name": meal["food_name"],
+            "portion": portion,
+            "calories": round(calories),
+            "protein_g": round(protein)
+        }
+
+    return {
+        "member_id": member_id,
+        "goal": profile["goal"],
+        "diet_type": profile["diet_type"],
+        "activity_level": activity_level,
+        "total_visits": visits,
+        "nutrition_target": nutrition_target,
+        "daily_plan": plan,
+        "daily_total": {
+            "calories": round(total_calories),
+            "protein_g": round(total_protein)
+        },
+        "ml_recommendations": [
+            {
+                "food_name": meal["food_name"],
+                "meal_type": meal["meal_type"],
+                "calories": float(meal["calories"]),
+                "protein_g": float(meal["protein_g"]),
+                "distance": meal["similarity_distance"]
+            }
+            for meal in ml_recommendations
+        ]
+    }

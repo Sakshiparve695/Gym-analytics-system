@@ -1,0 +1,4 @@
+plan_key,plan_id,plan_name,duration_months,price,plan_type,is_active
+1,1,Monthly,1,1000.00,Standard,1
+2,2,Quarterly,3,2700.00,Premium,1
+3,3,Annual,12,9000.00,Premium,1
