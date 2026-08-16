@@ -1,234 +1,602 @@
+# 🚀 GymPulse Analytics Platform
+### End-to-End Gym Management & Data Analytics Solution using FastAPI, MySQL, ETL, PySpark, Databricks, Machine Learning, Power BI & GitHub Actions
 
-# 🏋️ GymPulse Analytics Dockerized ETL & Member Insights Platform
-
-## 🚀 Overview
-
-GymPulse is a Dockerized end-to-end gym management analytics platform built using FastAPI, MySQL, Python ETL pipelines, and machine learning–based churn analysis.
-
-The system ingests gym attendance data through REST APIs, processes it using incremental ETL workflows, and generates analytics insights such as member activity tracking, attendance monitoring, and churn risk prediction.
-
-This project demonstrates practical backend engineering and data engineering concepts including:
-- REST API development
-- Incremental ETL processing
-- Dockerized multi-service architecture
-- Analytics pipeline design
-- Metadata-driven ETL workflows
-- Retry and resiliency handling
-- Churn prediction using Logistic Regression
 
 ---
 
-# 🎯 Problem Statement
+# 🚀 Project Overview
 
-Gym management systems often lack automated analytics and operational insights for tracking member engagement and churn behavior.
+GymPulse Analytics Platform is an end-to-end data engineering and analytics project that simulates a modern gym management and analytics system. It combines REST APIs, MySQL, Python ETL, dimensional data modeling, PySpark analytics, Databricks, machine learning-based nutrition recommendations, Power BI dashboards and GitHub Actions CI/CD.
 
-This project solves that by:
+The platform automates the journey of gym data from member and attendance management through data transformation, analytics and business intelligence reporting.
 
-- Building a scalable API-driven attendance system
-- Automating ETL-based attendance processing
-- Generating analytics-ready member insights
-- Predicting churn risk using machine learning
-- Implementing production-style Dockerized deployment
 
 ---
 
-# 🏗️ System Architecture
+# 🎯 Business Problem
+
+Gym management systems generate large volumes of member, membership and attendance data. Managing this information directly in operational tables makes analytical reporting difficult, repetitive and time-consuming.
+
+There was a need for a centralized platform that could:
+
+- Manage gym members and attendance through APIs
+- Store operational data in MySQL
+- Transform raw data into analytics-ready datasets
+- Build dimensional data structures for reporting
+- Analyze member activity and membership performance
+- Generate attendance and membership insights
+- Provide nutrition recommendations based on member profiles and activity
+- Present business insights through Power BI dashboards
+- Automate code validation using CI/CD
+
+
+---
+
+# 🎯 Solution
+
+GymPulse was designed as a layered data analytics platform.
+
+Member and attendance information is managed through FastAPI and stored in MySQL. Python-based ETL processes transform operational data into structured analytical datasets. Dimensional datasets such as members, plans and dates are generated for analytics.
+
+PySpark and Databricks are used for scalable data processing and analytical transformations. Machine learning is used in the nutrition recommendation module to identify meals based on nutritional similarity. Power BI provides interactive dashboards for attendance, membership and nutrition analytics.
+
+GitHub Actions provides automated CI/CD validation for the project.
+
+
+---
+
+# 🏗️ GymPulse Analytics Platform
+### End-to-End Gym Management & Data Analytics Architecture
 
 ```text
-Gym Members / Admin
-          │
-          ▼
-FastAPI Backend APIs
-          │
-          ▼
-MySQL Raw Layer
-(raw_attendance)
-          │
-          ▼
-Python ETL Pipeline
-          │
- ┌──────────────────┐
- ▼                  ▼
-Staging Layer       Analytics Layer
-(stg_attendance)    (member_analytics)
-          │
-          ▼
-Churn Prediction Engine
-(Logistic Regression)
+                                      ┌──────────────────────┐
+                                      │      Client/User     │
+                                      └──────────┬───────────┘
+                                                 │
+                                                 ▼
+                                   ┌─────────────────────────┐
+                                   │      FastAPI REST API   │
+                                   │   Gym Management System │
+                                   └──────────┬──────────────┘
+                                              │
+                           Add / Update / Fetch Members & Attendance
+                                              │
+                                              ▼
+                                   ┌─────────────────────────┐
+                                   │      MySQL Database     │
+                                   │   Operational / Raw Data │
+                                   └──────────┬──────────────┘
+                                              │
+                                              ▼
+                              ┌────────────────────────────────┐
+                              │        Python ETL Pipeline     │
+                              │--------------------------------│
+                              │ • Extract Raw Data             │
+                              │ • Data Validation              │
+                              │ • Data Cleaning                │
+                              │ • Data Transformation          │
+                              │ • Generate Analytics Datasets  │
+                              └──────────┬─────────────────────┘
+                                         │
+                                         ▼
+                              ┌───────────────────────────────┐
+                              │     Dimensional Data Layer    │
+                              │-------------------------------│
+                              │ • dim_member                   │
+                              │ • dim_plan                     │
+                              │ • dim_date                     │
+                              │ • fact_attendance               │
+                              │ • member_analytics              │
+                              └──────────┬────────────────────┘
+                                         │
+                          ┌──────────────┴──────────────┐
+                          ▼                             ▼
+               ┌──────────────────────┐      ┌────────────────────────┐
+               │   PySpark Analytics  │      │ Databricks Analytics   │
+               │ • Transformations    │      │ • Data Processing      │
+               │ • Aggregations       │      │ • Analytics Jobs       │
+               │ • Data Analysis      │      │ • Scheduled Workflows  │
+               └──────────┬───────────┘      └───────────┬────────────┘
+                          │                              │
+                          └──────────────┬───────────────┘
+                                         ▼
+                              ┌───────────────────────────┐
+                              │      Power BI Dashboards  │
+                              │---------------------------│
+                              │ • Attendance Analytics    │
+                              │ • Membership Analytics    │
+                              │ • Nutrition Analytics     │
+                              │ • Member Insights         │
+                              └───────────────────────────┘
+
+                    ┌─────────────────────────────────────┐
+                    │     Machine Learning Module         │
+                    │ Nutrition Recommendation System    │
+                    │ • Member Profile                    │
+                    │ • Activity Level                    │
+                    │ • Calorie / Protein Target          │
+                    │ • Meal Similarity Recommendation    │
+                    └─────────────────────────────────────┘
+
+                    ┌─────────────────────────────────────┐
+                    │       GitHub Actions CI/CD          │
+                    │ • Python Validation                  │
+                    │ • FastAPI Validation                 │
+                    │ • ML Module Validation               │
+                    │ • Docker Compose Validation          │
+                    │ • Container Build                    │
+                    └─────────────────────────────────────┘
 ```
 
+
 ---
 
-# ⚙️ Tech Stack
+# Data Flow
+
+1. Member and attendance information is submitted through FastAPI REST APIs.
+2. Operational records are stored in MySQL.
+3. Python ETL processes extract, validate, clean and transform raw data.
+4. Structured dimensional datasets are generated for analytical workloads.
+5. Attendance, membership and member analytics datasets are prepared for reporting.
+6. PySpark performs analytical transformations and aggregations.
+7. Databricks executes analytics workloads and scheduled jobs.
+8. The nutrition recommendation module retrieves member profile and attendance information.
+9. Machine learning identifies nutritionally similar meal options.
+10. Power BI provides interactive dashboards for business analysis.
+11. GitHub Actions automatically validates the application and Docker configuration on code changes.
+
+
+---
+
+# ⚙️ Technology Stack
 
 | Category | Technologies |
-|---|---|
-| Backend | FastAPI, Python |
-| Database | MySQL |
-| ETL | Python, Incremental Processing |
-| Machine Learning | Scikit-learn Logistic Regression |
-| DevOps | Docker, Docker Compose |
-| Analytics | SQL, Pandas |
-| APIs | REST APIs |
-| Monitoring | Logging |
+|-----------|--------------|
+| **Programming Language** | Python 3.11 |
+| **Backend Framework** | FastAPI |
+| **Operational Database (OLTP)** | MySQL |
+| **Data Ingestion** | REST APIs, JSON |
+| **ETL Pipeline** | Python, Pandas |
+| **Data Modeling** | Dimensional Data Model |
+| **Data Processing** | PySpark |
+| **Big Data Platform** | Databricks |
+| **Machine Learning** | Scikit-learn |
+| **ML Technique** | Nearest Neighbors, StandardScaler |
+| **Business Intelligence** | Microsoft Power BI |
+| **Containerization** | Docker, Docker Compose |
+| **CI/CD** | GitHub Actions |
+| **Version Control** | Git, GitHub |
+| **Development Tools** | VS Code |
+| **Database Connectivity** | mysql-connector-python |
+| **Configuration** | python-dotenv |
+
 
 ---
 
-# ⚡ Key Features
+# 🔄 End-to-End Data Engineering & Analytics Pipeline
 
-- REST API-based member management
-- Attendance tracking system
-- Incremental ETL processing using metadata tracking
-- Staging and analytics layer architecture
-- Churn risk prediction using Logistic Regression
-- Dockerized multi-container deployment
-- Retry-based MySQL connection handling
-- Automated ETL scheduling
-- Logging and resiliency support
+GymPulse follows a layered architecture that transforms operational gym management data into analytics-ready datasets, dashboards and intelligent recommendations.
+
 
 ---
 
-# 🔌 API Endpoints
+## 📥 Step 1 — Data Ingestion Layer
+
+Gym member and attendance information is managed through FastAPI REST APIs.
+
+The API acts as the entry point for gym management operations.
+
+### Data handled by the platform
+
+- Member Information
+- Membership Plans
+- Attendance Records
+- Member Analytics
+- Nutrition Profiles
+
+Example API interaction:
+
+```text
+FastAPI REST API
+        ↓
+Member / Attendance Request
+        ↓
+MySQL Database
+```
+
+
+---
+
+## 🗄️ Step 2 — Operational Database (MySQL)
+
+The application uses MySQL as the operational database for storing gym management data.
+
+The project contains tables supporting members, plans, attendance, nutrition profiles and analytical processing.
+
+Examples include:
+
+```sql
+members
+plans
+member_plan
+raw_attendance
+stg_attendance
+attendance
+member_analytics
+member_diet_profile
+nutrition_foods
+```
+
+The operational layer stores the data required by the API and downstream analytics processes.
+
+
+---
+
+## 🔄 Step 3 — ETL Processing
+
+A Python-based ETL pipeline transforms operational data into structured analytical datasets.
+
+### ETL Operations
+
+- Extract Raw Records
+- Data Validation
+- Data Cleaning
+- Data Transformation
+- Attendance Processing
+- Dimension Generation
+- Fact Data Generation
+- Analytics Dataset Preparation
+- Logging & Error Handling
+
+The ETL process prepares data for analytical workloads instead of directly querying operational data for every report.
+
+
+---
+
+## 📂 Step 4 — Dimensional Data Layer
+
+GymPulse uses structured dimensional datasets for analytical reporting.
+
+### Generated Dimensions
+
+```text
+dim_member
+dim_plan
+dim_date
+```
+
+### Fact Dataset
+
+```text
+fact_attendance
+```
+
+### Analytical Dataset
+
+```text
+member_analytics
+```
+
+This structure provides organized analytical data for attendance and membership reporting.
+
+
+---
+
+## 📊 Step 5 — Attendance & Membership Analytics
+
+The analytical layer supports insights into gym activity and membership performance.
+
+### Analytics include
+
+- Attendance trends
+- Most active members
+- Membership performance
+- Member activity
+- Plan-level analysis
+- Member analytics
+- Attendance summaries
+
+These datasets are used as inputs for Power BI reporting and further analytical processing.
+
+
+---
+
+## ⚡ Step 6 — PySpark Analytics Layer
+
+PySpark is used for data processing and analytical transformations.
+
+### Implemented Areas
+
+- Spark version validation
+- DataFrame processing
+- Dataset transformations
+- Analytical aggregations
+- Data preparation
+- Large-scale data processing
+
+PySpark provides a scalable analytics layer for the GymPulse platform.
+
+
+---
+
+## ☁️ Step 7 — Databricks Analytics Layer
+
+Databricks is used as the cloud analytics environment for the project.
+
+### Implemented Features
+
+- Databricks workspace
+- Spark-based analytics
+- Unity Catalog usage
+- Analytics tables
+- Data loading
+- Scheduled analytics job
+- Job execution monitoring
+
+The project includes evidence of successful Databricks job execution and analytics processing.
+
+
+---
+
+## 🤖 Step 8 — Machine Learning Nutrition Recommendation
+
+GymPulse includes a machine learning-based nutrition recommendation module.
+
+The module retrieves a member's profile and attendance information from MySQL and determines an activity level based on total visits.
+
+The nutrition target is calculated using member age, height, weight, goal and activity level.
+
+### Nutrition Target
+
+The system calculates:
+
+- Daily calorie target
+- Daily protein target
+- Activity level
+
+The system supports goals such as:
+
+- Fat Loss
+- Muscle Gain
+- Maintenance
+
+
+### Machine Learning Recommendation
+
+The nutrition recommender uses:
+
+```text
+StandardScaler
+NearestNeighbors
+```
+
+Nutrition features include:
+
+```text
+Calories
+Protein
+Carbohydrates
+Fat
+```
+
+The features are scaled before similarity calculation so that calories do not dominate the recommendation.
+
+The model identifies nutritionally similar food options and produces meal recommendations.
+
+
+---
+
+## 🍽️ Step 9 — Daily Nutrition Planning
+
+The nutrition module also builds a daily meal plan.
+
+Meal categories include:
+
+- Breakfast
+- Lunch
+- Snack
+- Dinner
+
+The system evaluates different food combinations and portion sizes against the member's calorie and protein targets.
+
+The final plan attempts to minimize the difference between the target nutritional requirements and the generated meal plan.
+
+
+---
+
+## 📈 Step 10 — Business Intelligence (Power BI)
+
+Power BI is used to visualize the analytical datasets generated by GymPulse.
+
+### Dashboard Areas
+
+- Attendance Dashboard
+- Membership Analytics
+- Nutritional Analysis
+- Member Activity
+- Most Active Members
+- Attendance Trends
+
+### Business Insights
+
+- Monitor member attendance
+- Identify active members
+- Analyze membership plans
+- Understand attendance patterns
+- Analyze nutritional recommendations
+- Support data-driven gym management decisions
+
+
+---
+
+# 🔌 REST API Endpoints
+
+The FastAPI application provides endpoints for gym management and analytics functionality.
 
 | Method | Endpoint | Description |
-|---|---|---|
-| GET | `/` | Health check |
-| POST | `/members` | Add gym member |
-| GET | `/members` | View members |
-| PUT | `/members/{member_id}` | Update member |
-| DELETE | `/members/{member_id}` | Delete member |
-| POST | `/attendance` | Mark attendance |
-| GET | `/top-members` | View top active members |
-| GET | `/churn` | Churn prediction analysis |
-| GET | `/insights` | Gym insights and analytics |
+|---------|----------|-------------|
+| GET | `/members` | Retrieve gym members |
+| POST | `/members` | Create a new member |
+| GET | `/members/{member_id}` | Retrieve a specific member |
+| PUT | `/members/{member_id}` | Update member information |
+| DELETE | `/members/{member_id}` | Delete a member |
+| POST | `/attendance` | Add attendance record |
+| GET | `/attendance` | Retrieve attendance records |
+| GET | `/analytics/member/{member_id}` | Retrieve member analytics |
+| GET | `/analytics/attendance` | Retrieve attendance analytics |
+| GET | `/analytics/churn` | Retrieve churn analysis |
+| GET | `/nutrition/recommend/{member_id}` | Generate nutrition recommendations |
+
 
 ---
 
-# 🔄 ETL Pipeline Workflow
+# 📊 Analytics Delivered
 
-## 1️⃣ Extract
+The platform provides insights into:
 
-New attendance records are extracted incrementally from:
+- Member Attendance
+- Attendance Trends
+- Most Active Members
+- Membership Plan Performance
+- Member Analytics
+- Attendance Statistics
+- Nutrition Analysis
+- Calorie Targets
+- Protein Targets
+- Meal Recommendations
+- Churn Analysis
+- Business KPIs
 
-- `raw_attendance`
-
-using metadata tracking from:
-
-- `etl_metadata.last_run`
-
----
-
-## 2️⃣ Transform
-
-The ETL pipeline:
-
-- validates attendance records
-- aggregates member visits
-- calculates latest visit dates
-- computes activity metrics
-- prepares analytics-ready datasets
 
 ---
 
-## 3️⃣ Load
+# ☁️ Databricks & Cloud Analytics
 
-Processed data is loaded into:
+GymPulse includes a Databricks-based analytics environment for scalable data processing.
 
-- `stg_attendance`
-- `member_analytics`
+The project includes:
 
----
+- Databricks Workspace
+- Spark Processing
+- Unity Catalog
+- Analytics Tables
+- Data Loading
+- Scheduled Databricks Job
+- Job Execution Monitoring
 
-# 📊 Analytics Features
+The project screenshots document the analytics workflow and successful job execution.
 
-The analytics layer provides:
-
-- Total member visits
-- Last visit tracking
-- Attendance monitoring
-- Member activity aggregation
-- Churn risk analysis
-- Top active members insights
 
 ---
 
-# 🤖 Churn Prediction Logic
+# ⚙️ CI/CD with GitHub Actions
 
-The project uses Logistic Regression to identify members with high churn risk based on:
+GymPulse includes a GitHub Actions CI/CD pipeline that automatically validates the project whenever changes are pushed to the `main` branch or submitted through a pull request.
 
-- total visits
-- average visit frequency
-- inactivity duration
-- recent attendance behavior
+### CI/CD Pipeline
 
-Members with low activity or long inactivity periods are marked as higher churn risk.
+The workflow performs:
 
----
+- Repository checkout
+- Python 3.11 setup
+- Dependency installation
+- Python syntax validation
+- FastAPI application validation
+- Nutrition recommendation module validation
+- Docker Compose configuration validation
+- Docker container build
 
-# 🐳 Dockerized Multi-Service Architecture
+This provides automated quality checks before changes are considered ready.
 
-The project is fully containerized using Docker Compose.
-
-## Services
-
-| Service | Description |
-|---|---|
-| `api` | FastAPI backend service |
-| `db` | MySQL database |
-| `etl` | ETL processing service |
 
 ---
 
-# ⚙️ Reliability & Resiliency Features
+# ⭐ Key Features
 
-- Retry-based MySQL connection handling
-- ETL recovery support using logging
-- Dockerized service dependency management
-- Incremental ETL execution using metadata tracking
-- Automated continuous ETL scheduling
-- Environment variable–based credential management
+GymPulse Analytics Platform demonstrates an end-to-end gym management and data engineering workflow.
 
----
+### Core Features
 
-# 📂 Database Layers
+- 🏋️ FastAPI-based Gym Management System
+- 👥 Member Management
+- 📅 Attendance Management
+- 🗄️ MySQL Operational Database
+- 🔄 Python ETL Pipeline
+- 📂 Dimensional Data Architecture
+- 📊 Attendance & Membership Analytics
+- ⚡ PySpark Analytics
+- ☁️ Databricks Analytics Platform
+- 🧠 Machine Learning Nutrition Recommendation
+- 🍽️ Personalized Meal Recommendation
+- 📈 Power BI Business Dashboards
+- 🐳 Dockerized Environment
+- ⚙️ GitHub Actions CI/CD
+- 🔐 Secure Configuration using Environment Variables
 
-## Raw Layer
-- `raw_attendance`
-
-## Staging Layer
-- `stg_attendance`
-
-## Analytics Layer
-- `member_analytics`
-
-## Metadata Layer
-- `etl_metadata`
 
 ---
 
-# 📸 Project Screenshots
+# 🧩 Engineering Challenges Solved
 
-## ⚡ FastAPI Swagger Documentation
+Throughout the project, several engineering challenges were addressed while integrating backend development, data engineering, analytics, machine learning and business intelligence into a unified platform.
 
-![FastAPI Docs](Screenshots/Docker_FastAPI.png)
+### Backend Engineering
 
----
+- Designed REST APIs using FastAPI
+- Implemented member management operations
+- Implemented attendance management
+- Connected FastAPI with MySQL
+- Added analytics endpoints
 
-## 🐳 Dockerized Multi-Service Architecture
 
-![Docker Containers](Screenshots/ETL_Docker_Container.png)
+### Data Engineering
 
----
+- Designed structured analytical datasets
+- Built ETL processing for attendance data
+- Implemented data validation and transformation
+- Generated dimensional datasets
+- Created fact and analytical datasets
+- Separated operational and analytical workloads
 
-## 🔄 ETL Pipeline Execution Logs
 
-![ETL Logs](Screenshots/GYM_analytics_ETL_Log.png)
+### Analytics Engineering
 
----
+- Processed datasets using PySpark
+- Built analytical transformations
+- Generated member and attendance insights
+- Used Databricks for scalable processing
+- Implemented scheduled analytics execution
 
-## 📊 Analytics Layer Output
 
-![Analytics Layer](Screenshots/GYM_Analytics_Churn_Risk.png)
+### Machine Learning
+
+- Built a nutrition recommendation module
+- Scaled nutritional features using StandardScaler
+- Applied NearestNeighbors for similarity-based recommendations
+- Calculated activity levels from attendance
+- Generated calorie and protein targets
+- Built daily meal recommendations
+
+
+### Business Intelligence
+
+- Built Power BI dashboards
+- Created attendance analytics
+- Created membership analytics
+- Created nutrition analysis
+- Developed member activity insights
+
+
+### DevOps / CI/CD
+
+- Created GitHub Actions workflow
+- Automated dependency installation
+- Added Python syntax validation
+- Added FastAPI module validation
+- Added ML module validation
+- Added Docker Compose validation
+- Added Docker build validation
+
 
 ---
 
@@ -237,20 +605,63 @@ The project is fully containerized using Docker Compose.
 ```text
 GYM_Management_analytics/
 │
-├── backend/
-├── docker-compose.yml
-├── Dockerfile
-├── etl.py
-├── Gym_Management_System.py
+├── Gym_Management_System.py          # FastAPI Gym Management API
+├── etl.py                            # ETL Pipeline
+├── generate_members.py               # Member Data Generator
+├── Generate_Attendence.py            # Attendance Data Generator
+├── generate_food_catalog.py          # Nutrition Food Catalog Generator
+├── generate_nutrition_data.py        # Nutrition Data Generator
+├── nutrition_recommender.py          # ML Nutrition Recommendation System
+│
 ├── requirements.txt
-├── screenshots/
-├── .env
+├── .env.example
+├── docker-compose.yml
+│
+├── Fact_attendence.csv
+├── Nutrition_Analysis.csv
+├── dim_date.csv
+├── dim_member.csv
+├── dim_plan.csv
+├── fact_deliveries_File.csv
+│
+├── sakshi_project_db_attendance.sql
+├── sakshi_project_db_dim_date.sql
+├── sakshi_project_db_dim_member.sql
+├── sakshi_project_db_dim_plan.sql
+├── sakshi_project_db_fact_attendance.sql
+├── sakshi_project_db_member_analytics.sql
+├── sakshi_project_db_routines.sql
+│
+├── Screenshots/
+│   ├── Attendance_Dashboard_PBI.png
+│   ├── Azure_Databricks _Workspace.png
+│   ├── Data_Loading.png
+│   ├── Databricks_job_success.png
+│   ├── Date_Dimension.png
+│   ├── Joined_DataSET.png
+│   ├── Member_Dimension.png
+│   ├── Membership_Analytics.png
+│   ├── Most_Active_Member.png
+│   ├── Nutritional_Analysis_PBI.png
+│   ├── PBI_Attendance_Dashboard.png
+│   ├── Testing_endpoint_1.png
+│   ├── Testing_endpoint_2.png
+│   ├── Unity_Catlogue_Volume.png
+│   ├── Warehouse_analytics_Table.png
+│   ├── spark_Version.png
+│   └── FastAPI_Attendence_Endpoint.png
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml                    # GitHub Actions CI/CD
+│
 └── README.md
 ```
 
+
 ---
 
-# 🚀 Running the Project
+# 🚀 Getting Started
 
 ## 1️⃣ Clone Repository
 
@@ -259,68 +670,151 @@ git clone https://github.com/Sakshiparve695/Gym-analytics-system.git
 cd Gym-analytics-system
 ```
 
+
 ---
 
-## 2️⃣ Configure Environment Variables
+## 2️⃣ Install Dependencies
 
-Create a `.env` file:
+```bash
+pip install -r requirements.txt
+```
+
+
+---
+
+## 3️⃣ Configure Environment Variables
+
+Create a `.env` file locally and configure your MySQL connection.
 
 ```env
-DB_PASSWORD=your_password
+DB_HOST=<your_host>
+DB_PORT=3306
+DB_USER=<your_username>
+DB_PASSWORD=<your_password>
+DB_NAME=sakshi_project_db
 ```
+
+Do not commit the `.env` file to GitHub.
+
+Use `.env.example` as the configuration template.
+
 
 ---
 
-## 3️⃣ Start Docker Containers
+## 4️⃣ Start the REST API
 
 ```bash
-docker-compose up --build
+uvicorn Gym_Management_System:app --reload
 ```
+
+The FastAPI application will start locally and provide the interactive API documentation.
+
 
 ---
 
-## 4️⃣ Verify Running Containers
+## 5️⃣ Execute ETL Pipeline
 
 ```bash
-docker ps
+python etl.py
 ```
 
+
 ---
 
-## 5️⃣ Access FastAPI Swagger Docs
+## 6️⃣ Generate Project Data
 
-```text
-http://127.0.0.1:8000/docs
+Member and attendance data can be generated using the project data-generation scripts.
+
+```bash
+python generate_members.py
+python Generate_Attendence.py
 ```
 
----
+Nutrition data can be generated using:
 
-# 📈 Future Improvements
+```bash
+python generate_food_catalog.py
+python generate_nutrition_data.py
+```
 
-- Power BI / Tableau dashboard integration
-- Kafka-based streaming ingestion
-- Apache Airflow orchestration
-- Cloud deployment on GCP/AWS
-- Advanced ML churn prediction models
-- Real-time analytics monitoring
 
 ---
 
-# 🎯 Why This Project Stands Out
+## 7️⃣ Run the Nutrition Recommendation Module
 
-This project demonstrates practical real-world engineering concepts including:
+```bash
+python nutrition_recommender.py
+```
 
-- API-driven data ingestion
-- Incremental ETL pipeline design
-- Dockerized backend architecture
-- Machine learning integration
-- Metadata-driven processing
-- Production-style debugging and resiliency handling
-- Analytics engineering workflows
+The module retrieves member information, attendance, nutrition targets and available food data to generate machine learning-based meal recommendations.
+
+
+---
+
+## 8️⃣ Launch Docker Environment
+
+```bash
+docker compose up -d
+```
+
+Docker Compose can be used to run the project's containerized services.
+
+
+---
+
+## 9️⃣ Explore Databricks Analytics
+
+Upload or connect the project analytics datasets to the Databricks environment and execute the PySpark analytics workflow.
+
+The repository contains supporting SQL files, analytical datasets and screenshots documenting the Databricks workflow.
+
+
+---
+
+## 🔟 Open Power BI Dashboards
+
+Open the Power BI reports and connect them to the prepared analytical datasets to explore:
+
+- Attendance Analytics
+- Membership Analytics
+- Nutrition Analysis
+- Member Activity
+
+
+---
+
+# 🚀 Future Roadmap
+
+The GymPulse architecture can be extended with additional enterprise-grade capabilities.
+
+Planned improvements include:
+
+- 📡 Real-Time Attendance Streaming using Apache Kafka
+- 📊 Advanced Data Quality Monitoring
+- 📩 Email Notifications & Alerts
+- 🤖 Advanced Predictive Member Churn
+- 🧠 More Personalized Nutrition Recommendations
+- 📈 Real-Time Power BI Dashboards
+- 🏗️ Microsoft Fabric / Lakehouse Integration
+- ☁️ Cloud Deployment of the Complete Analytics Platform
+- 📦 Data Versioning & Lineage Tracking
+- 🔐 Advanced Authentication and Role-Based Access Control
+
 
 ---
 
 # 👩‍💻 Author
 
-Sakshi Parve
-Aspiring Data Engineer & Backend Developer
+## Sakshi Parve
+
+**Aspiring Data Engineer**
+
+**Tech Stack**
+
+Python • SQL • FastAPI • MySQL • PySpark • Databricks • Power BI • Docker • Git • GitHub • Machine Learning
+
+
+---
+
+⭐ If you found this project useful, consider giving it a Star.
+
